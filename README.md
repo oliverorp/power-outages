@@ -317,7 +317,7 @@ In the final model, I kept the columns that were OneHotEncoded() and then transf
 StandardScaler(): This method is effective when the underlying features are approximately normally distributed.
 
 QuantileTransformer(): This method is useful when the data distribution is highly skewed or not normal.
-
+<br>
 I looked at the distributions of each numerical variable and then applied the corresponding transformation.
 <br>
 The other critical part of improving this model was to tune relevant hyperparameters. I used GridSearchCV() to find the optimal value of k number of neighbors and the optimal distance algorithm for computating the nearest neighbors. The hyperparameters we will be tuning are<span style="color: #FFCCCC;"> k number of neighbors and weights (uniform or distance)</span>. With too few neighbors, the model will be prone to overfitting, but with to many, it may over-generalize. Thus, we need to find the k performs best, which is interpreted as the k that maximizes F1-Score.
