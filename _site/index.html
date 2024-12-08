@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Utilities Industry in the US: Risk Factors and Predictive Modeling | power-outages</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Utilities Industry in the US: Risk Factors and Predictive Modeling" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A Data Analysis and ML HW for EECS 398 at U-M" />
+<meta property="og:description" content="A Data Analysis and ML HW for EECS 398 at U-M" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="power-outages" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Utilities Industry in the US: Risk Factors and Predictive Modeling" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"A Data Analysis and ML HW for EECS 398 at U-M","headline":"Utilities Industry in the US: Risk Factors and Predictive Modeling","name":"power-outages","url":"http://localhost:4000/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=e49af13025ffb782a7d0b245e477a54c7a624424">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="http://localhost:4000/">power-outages</a></h1>
+
+        
+
+        <p>A Data Analysis and ML HW for EECS 398 at U-M</p>
+
+        
+        <p class="view"><a href="https://github.com/oliverorp/power-outages">View the Project on GitHub <small>oliverorp/power-outages</small></a></p>
+        
+
+        
+
+        
+      </header>
+      <section>
+
+      <h1 id="utilities-industry-in-the-us-risk-factors-and-predictive-modeling">Utilities Industry in the US: Risk Factors and Predictive Modeling</h1>
+
+<p>A Data Analysis and ML HW for EECS 398 at U-M</p>
+
+<p><small>Oliver Pourmussa | </small>
+<small> oliverpo@umich.edu </small></p>
+
+<h2 id="-introduction"><span style="color:#FF9999;"> Introduction<span></span></span></h2>
+
+<p>The data set I am working with consists of power outages in the US from 2000 - 2016. There is much to be deduced from this data, but I am particularly curious as to the risk climate of the utilities industry.</p>
+
+<p>What geographic regions are most prone to severe power outages, and more generally, what are some things we can discover about the challenges faced in the utilities industry?</p>
+
+<p>In the interest of deploying my machine learning tool kit, I will also build a multiclass classifier that determines the cause of a given outage.</p>
+
+<p>It is this kind of inquiry that finds its place both in the interest of an investor and a utilities company. Investors are concerned about risk, so the exploratory data analysis section is fitting. Utility companies need to be prepared with how to deploy resources and address outages, so the final machine learning model may have some applications to that demographic as well.</p>
+
+<h3 id="dataset">Dataset</h3>
+
+<p>Number of Rows: 1534</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Column Name</strong></th>
+      <th><strong>Description</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">YEAR</code></td>
+      <td>The year in which the data was recorded.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">POSTAL.CODE</code></td>
+      <td>The state abbreviation.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CLIMATE.REGION</code></td>
+      <td>The climate region to which the location belongs.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ANOMALY.LEVEL</code></td>
+      <td>Level of climate anomaly oscillation.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CAUSE.CATEGORY</code></td>
+      <td>The category of the cause for the outage (e.g., severe weather).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">OUTAGE.DURATION</code></td>
+      <td>The duration of the outage (minutes)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CUSTOMERS.AFFECTED</code></td>
+      <td>The number of customers affected by the outage.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">TOTAL.CUSTOMERS</code></td>
+      <td>The total number of customers in the area or region.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">POPULATION</code></td>
+      <td>The population of the area or region.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">POPPCT_URBAN</code></td>
+      <td>Percentage of the population living in urban areas.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PCT_WATER_TOT</code></td>
+      <td>The percentage of water area in a state compared to the total water area in the continental U.S (e.g., lakes, rivers).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SEVERE</code></td>
+      <td>Whether the outage is classified as severe or not (exceeding 1 day in duration). This column was added using a transformation.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+<br /></p>
+<h2 id="-data-cleaning-and-exploratory-data-analysis"><span style="color:#FF9999;"> Data Cleaning and Exploratory Data Analysis<span></span></span></h2>
+
+<h3 id="data-cleaning">Data Cleaning</h3>
+
+<p>Data was cleaned and imputed using a combination of strategies. The cleaning consisted of a few tasks: make the YEAR column a datetime object, make the climate regions for AK and HI the same as their state postal code since they were missing, and add a new column, SEVERE, as a boolean value indicating whether or not a power outage exceeded 1 day in duration.</p>
+
+<p>The cleaned dataframe is shown below:</p>
+
+<div style="overflow-x: auto; max-width: 100%; padding: 10px;">
+  <table>
+    <thead>
+      <tr>
+        <th>YEAR</th>
+        <th>POSTAL.CODE</th>
+        <th>CLIMATE.REGION</th>
+        <th>ANOMALY.LEVEL</th>
+        <th>CAUSE.CATEGORY</th>
+        <th>OUTAGE.DURATION</th>
+        <th>CUSTOMERS.AFFECTED</th>
+        <th>TOTAL.CUSTOMERS</th>
+        <th>POPULATION</th>
+        <th>POPPCT_URBAN</th>
+        <th>PCT_WATER_TOT</th>
+        <th>SEVERE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2011</td>
+        <td>MN</td>
+        <td>East North Central</td>
+        <td>-0.3</td>
+        <td>severe weather</td>
+        <td>3060</td>
+        <td>70000</td>
+        <td>2.5957e+06</td>
+        <td>5.34812e+06</td>
+        <td>73.27</td>
+        <td>8.40733</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>2014</td>
+        <td>MN</td>
+        <td>East North Central</td>
+        <td>-0.1</td>
+        <td>intentional attack</td>
+        <td>1</td>
+        <td>0</td>
+        <td>2.64074e+06</td>
+        <td>5.45712e+06</td>
+        <td>73.27</td>
+        <td>8.40733</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>2010</td>
+        <td>MN</td>
+        <td>East North Central</td>
+        <td>-1.5</td>
+        <td>severe weather</td>
+        <td>3000</td>
+        <td>70000</td>
+        <td>2.5869e+06</td>
+        <td>5.3109e+06</td>
+        <td>73.27</td>
+        <td>8.40733</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>2012</td>
+        <td>MN</td>
+        <td>East North Central</td>
+        <td>-0.1</td>
+        <td>severe weather</td>
+        <td>2550</td>
+        <td>68200</td>
+        <td>2.60681e+06</td>
+        <td>5.38044e+06</td>
+        <td>73.27</td>
+        <td>8.40733</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>2015</td>
+        <td>MN</td>
+        <td>East North Central</td>
+        <td>1.2</td>
+        <td>severe weather</td>
+        <td>1740</td>
+        <td>250000</td>
+        <td>2.67353e+06</td>
+        <td>5.48959e+06</td>
+        <td>73.27</td>
+        <td>8.40733</td>
+        <td>True</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 id="imputation">Imputation</h3>
+
+<p>In the dataframe above, several imputation strategies were employed. OUTAGE.DURATION had 58 NaN values, CUSTOMERS.AFFECTED had 443 NaNs, and ANOMALY.LEVEL had 9 NaN values. OUTAGE.DURATION was imputed using conditional median imputation based on outage cause since this distribution of duration is skewed right. ANOMALY.LEVEL was imputed using the mean, given its symmetric distribution. CUSTOMERS.AFFECTED was imputed using conditional median imputation, but was not utilized, with the exception of one visualization in the bivariate analysis section.</p>
+
+<iframe src="assets/anomaly_pre.html" width="600" height="400" frameborder="0"></iframe>
+
+<iframe src="assets/anomaly_post.html" width="600" height="400" frameborder="0"></iframe>
+
+<p>The distribution of ANOMALY.LEVEL was left unchanged. This is because the distribution was already approximately normal.</p>
+
+<iframe src="assets/outage_duration_pre.html" width="600" height="400" frameborder="0"></iframe>
+<iframe src="assets/outage_duration_post.html" width="600" height="400" frameborder="0"></iframe>
+
+<p>The distribution of OUTAGE.DURATION accumulated more mass around its center point.</p>
+
+<h3 id="univariate-analysis">Univariate Analysis</h3>
+
+<p>A simple bar chart displays the number of power outages associated with each cause category for the time period 2000 - 2016. It appears that severe weather, intentional attack, and system operability disruption are among the most frequent causes of power outages. This chart appeals to those interested in risk factors associated with the utilities industry and what remains to be the most significant hurdles in that space.</p>
+
+<iframe src="assets/univariate_1.html" width="600" height="400" frameborder="0"></iframe>
+
+<h2 id="bivariate-analysis">Bivariate Analysis</h2>
+
+<p>Let’s continue our exploration of the risk factors in the utilities industry.</p>
+
+<p>Specifically, let’s explore the following</p>
+
+<p>(1) Is the utilities industry adapting to its challenges? Let’s look at customers affected over time to see if we can find a trend in outage mitigation.</p>
+
+<p>(2) Distributions of outage duration by cause category in order to get a good understanding of what kinds of outages are the most severe.</p>
+
+<iframe src="assets/time_series.html" width="500" height="400" frameborder="0"></iframe>
+
+<iframe src="assets/box_plot.html" width="600" height="400" frameborder="0"></iframe>
+
+<p>The time series data suggests a negative correlation between customers affected and time. Perhaps utilities companies are adapting to their challenges and becoming more efficient with outage mitigation.</p>
+
+<p>The second bivariate display shows that severe weather, fuel supply emergency, and public appeal have the largest median response times. Markets especially prone to these risk factors may be of interest to someone seeking a better understanding of the risks associated with the utility space.</p>
+
+<h2 id="interesting-aggregates">Interesting Aggregates</h2>
+
+<p>Finally, on the topic of risks in the utilities space, we can group our data to see what regions are associated with the most severe power outages, and how that is changing over time.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">outages</span><span class="p">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">'YEAR'</span><span class="p">,</span> <span class="s">'POSTAL.CODE'</span><span class="p">])[</span><span class="s">'SEVERE'</span><span class="p">].</span><span class="nb">sum</span><span class="p">().</span><span class="n">reset_index</span><span class="p">()</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">YEAR</th>
+      <th style="text-align: left">POSTAL.CODE</th>
+      <th style="text-align: right">SEVERE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: left">AK</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: left">AL</td>
+      <td style="text-align: right">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: left">AZ</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: left">CA</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: left">DE</td>
+      <td style="text-align: right">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+<br />
+Equivalently, the following map shows the states with the most number of”severe” power outages each year.</p>
+
+<iframe src="assets/choropleth.html" width="700" height="500" frameborder="0"></iframe>
+
+<p>States with larger populations, such as California, Texas, and New York seem to dominate this space. Let’s perform a transformation our data to find the number of SEVERE outages per 100,000 people.</p>
+
+<iframe src="assets/barchart_adj.html" width="700" height="400" frameborder="0"></iframe>
+
+<p>With adjustments, large population centers like California, Texas, and New York are no longer included amongst states with the most instances of severe power outages. The data is more interpretable because now the frequency is scaled relative to population size. We see states like MI, MD, LA, and WA to continue to be amongst those with more occurrences of severe outages, while DC has made it to position 1. This might require more exploration since DC’s population is very small to start, so SEVERE / population would naturally be higher.</p>
+
+<p>Furthermore, states in Tornado alley have made it to leader board, so besides the outlier of DC, this scaling process has yielded interpretable results.</p>
+
+<p><span style="color: #FFCCCC;"> <b> Data Analysis Conclusion </b> </span>
+To sum things up, we have analyzed potential regional risk factors in the utilities industry as well as relevant progress in the industry as a whole throughout time.
+<br />
+<br /></p>
+
+<h2 id="-framing-a-prediction-problem"><span style="color:#FF9999;"> Framing a Prediction Problem<span></span></span></h2>
+
+<p>The prediction problem is denoted as follows.</p>
+
+<p><b><i>Predict the cause of a power outage </i></b></p>
+
+<p>This is a multiclass classification problem. We will attempt to use k-nearest neighbors algorithm and then evaluate the model’s competency using F1-score. F1-score is our metric of choice when it comes to performance because the data is unbalanced (most outages are from severe weather and intentional attack), and we care about false positives since deploying the wrong resources to an outage can be substantially costly.</p>
+
+<p>Knowing the cause of an outage using a predictive model helps utility companies better prepare for the corresponding damages. We will thus predict CAUSE.CATEGORY because of its real world applications (and its relevance to understanding how to build a classifier).</p>
+
+<p>The feature variables used are described in the following section “Baseline Model”.
+These variables are static, and are therefore known at the time of the outage. We are safe to proceed.</p>
+
+<h2 id="-baseline-model"><span style="color:#FF9999;"> Baseline Model<span></span></span></h2>
+
+<p>The feature space can be denoted as follows:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Variable</strong></th>
+      <th><strong>Type</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>POSTAL.CODE</strong></td>
+      <td>Nominal</td>
+    </tr>
+    <tr>
+      <td><strong>CLIMATE.REGION</strong></td>
+      <td>Nominal</td>
+    </tr>
+    <tr>
+      <td><strong>ANOMALY.LEVEL</strong></td>
+      <td>Quantitative</td>
+    </tr>
+    <tr>
+      <td><strong>TOTAL.CUSTOMERS</strong></td>
+      <td>Quantitative</td>
+    </tr>
+    <tr>
+      <td><strong>POPULATION</strong></td>
+      <td>Quantitative</td>
+    </tr>
+    <tr>
+      <td><strong>POPPCT_URBAN</strong></td>
+      <td>Quantitative</td>
+    </tr>
+    <tr>
+      <td><strong>PCT_WATER_TOT</strong></td>
+      <td>Quantitative</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>I used the OneHotEncoder() from scikit-learn to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop=’first’ to avoid multicollinearity by removing the first category as a reference.”</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="n">simple_preprocessing</span> <span class="o">=</span> <span class="n">make_column_transformer</span><span class="p">((</span><span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="s">'first'</span><span class="p">,</span> <span class="n">handle_unknown</span><span class="o">=</span><span class="s">'ignore'</span><span class="p">),</span> <span class="p">[</span><span class="s">'POSTAL.CODE'</span><span class="p">,</span> <span class="s">'CLIMATE.REGION'</span><span class="p">]))</span>
+   <span class="n">simple_knn</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">simple_preprocessing</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">())</span>
+   <span class="n">simple_knn</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+   <span class="n">simple_y_pred</span> <span class="o">=</span> <span class="n">simple_knn</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+   <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">simple_y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="bp">None</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">f1_simple</span>
+    <span class="n">array</span><span class="p">([</span><span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.44444444</span><span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span>
+       <span class="mf">0.64692483</span><span class="p">,</span> <span class="mf">0.18181818</span><span class="p">])</span>
+</code></pre></div></div>
+
+<iframe src="assets/f1_simple.html" width="700" height="400" frameborder="0"></iframe>
+
+<h3 id="performance-evaluation">Performance Evaluation</h3>
+
+<p>This simple model fails in many ways to produce viable results and can not be consiered “good”. Classes with F1-Scores of 0 indicate the model has no predictive power for those classes. There simply is not enough granularity in the feature space to distinguish outages that are not caused by severe weather. However, the model does perform moderately well in classifying severe weather events (F1-Score = 0.65). Let’s see if we can improve our model using relevant transformations and hyperparameter tuning.</p>
+
+<h2 id="-final-model"><span style="color:#FF9999;"> Final Model<span></span></span></h2>
+
+<p>In the final model, I kept the columns that were OneHotEncoded() and then transformed my numerical data. Because K-NN is a distance based algorithm and picks the most frequently occurring category out of the K most similar data points, having data in different scales can disrupt the similarities between observations. Thus, we need to transform using either a QuantileTransformer() or a StandardScaler(). The decision rule for these two methods is as follows:</p>
+
+<p>StandardScaler(): This method is effective when the underlying features are approximately normally distributed.</p>
+
+<p>QuantileTransformer(): This method is useful when the data distribution is highly skewed or not normal.</p>
+
+<p><br />
+ The other critical part of improving this model was to tune relevant hyperparameters. I used GridSearchCV() to find the optimal value of k number of neighbors and the optimal distance algorithm for computating the nearest neighbors.</p>
+
+<h3 id="performance-improvements">Performance Improvements</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pipe</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">adv_preprocessing</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">())</span>
+<span class="n">searcher</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+        <span class="n">pipe</span><span class="p">,</span>
+        <span class="n">param_grid</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
+        <span class="n">scoring</span><span class="o">=</span><span class="s">'f1_weighted'</span>
+    <span class="p">)</span>
+
+<span class="n">searcher</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The hyperparameters that performed best were:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">{</span><span class="s">'kneighborsclassifier__n_neighbors'</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+ <span class="s">'kneighborsclassifier__weights'</span><span class="p">:</span> <span class="s">'distance'</span><span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">f1_final</span>
+    <span class="n">array</span><span class="p">([</span><span class="mf">0.08695652</span><span class="p">,</span> <span class="mf">0.22222222</span><span class="p">,</span> <span class="mf">0.65811966</span><span class="p">,</span> <span class="mf">0.37037037</span><span class="p">,</span> <span class="mf">0.4375</span>    <span class="p">,</span>
+       <span class="mf">0.71611253</span><span class="p">,</span> <span class="mf">0.3255814</span> <span class="p">])</span>
+</code></pre></div></div>
+
+<iframe src="assets/f1_final.html" width="700" height="400" frameborder="0"></iframe>
+
+<p>F1-score improved substantially, especially for the severe weather category and intentional attack.
+From the confusion matrix, it appears that our model is sufficient at predicting severe weather and intentional attack. It has a tendency to mix the two up, but can somewhat decipher that these two events have some unique characteristics about them. A better model would take care of the granularity associated with the other causes, perhaps by having a more robust feature space.</p>
+
+<iframe src="assets/confusion_matrix.html" width="700" height="400" frameborder="0"></iframe>
+
+<p><br />
+<br /></p>
+<h2 id="-conclusion"><span style="color:#FF9999;"> Conclusion<span></span></span></h2>
+<p>I broadly examined risk factors in the utilities industry. I then proposed a general model to classify the cause of a power outage before improving upon it sustantially through enhancing my feature space.</p>
+
+<!-- <iframe
+  src="assets/choropleth.html"
+  width="700"
+  height="500"
+  frameborder="0"
+></iframe> -->
+
+
+      </section>
+      <footer>
+        
+        <p>This project is maintained by <a href="https://github.com/oliverorp">oliverorp</a></p>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+  </body>
+</html>
