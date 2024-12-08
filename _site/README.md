@@ -215,10 +215,6 @@ The second bivariate display shows that severe weather, fuel supply emergency, a
 
 Finally, on the topic of risks in the utilities space, we can group our data to see what regions are associated with the most severe power outages, and how that is changing over time.
 
-```python
-outages.groupby(['YEAR', 'POSTAL.CODE'])['SEVERE'].sum().reset_index()
-```
-
 | YEAR | POSTAL.CODE | SEVERE |
 | ---: | :---------- | -----: |
 | 2000 | AK          |      0 |
@@ -286,15 +282,7 @@ The feature space can be denoted as follows:
 I used the OneHotEncoder() from scikit-learn to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop='first' to avoid multicollinearity by removing the first category as a reference."
 
 ```python
-   simple_preprocessing = make_column_transformer((OneHotEncoder(drop='first', handle_unknown='ignore'), ['POSTAL.CODE', 'CLIMATE.REGION']))
-   simple_knn = make_pipeline(simple_preprocessing, KNeighborsClassifier())
-   simple_knn.fit(X_train, y_train)
-   simple_y_pred = simple_knn.predict(X_test)
-   f1_score(y_test,simple_y_pred, average=None )
-```
-
-```python
-    f1_simple
+    F1 Score
     array([0.        , 0.        , 0.44444444, 0.        , 0.        ,
        0.64692483, 0.18181818])
 ```
@@ -317,22 +305,12 @@ In the final model, I kept the columns that were OneHotEncoded() and then transf
 StandardScaler(): This method is effective when the underlying features are approximately normally distributed.
 
 QuantileTransformer(): This method is useful when the data distribution is highly skewed or not normal.
-
 <br>
- The other critical part of improving this model was to tune relevant hyperparameters. I used GridSearchCV() to find the optimal value of k number of neighbors and the optimal distance algorithm for computating the nearest neighbors.
+I looked at the distributions of each numerical variable and then applied the corresponding transformation.
+<br>
+The other critical part of improving this model was to tune relevant hyperparameters. I used GridSearchCV() to find the optimal value of k number of neighbors and the optimal distance algorithm for computating the nearest neighbors. The hyperparameters we will be tuning are<span style="color: #FFCCCC;"> k number of neighbors and weights (uniform or distance)</span>. With too few neighbors, the model will be prone to overfitting, but with to many, it may over-generalize. Thus, we need to find the k performs best, which is interpreted as the k that maximizes F1-Score.
 
 ### Performance Improvements
-
-```python
-pipe = make_pipeline(adv_preprocessing, KNeighborsClassifier())
-searcher = GridSearchCV(
-        pipe,
-        param_grid=hyperparams,
-        scoring='f1_weighted'
-    )
-
-searcher.fit(X_train, y_train)
-```
 
 The hyperparameters that performed best were:
 
@@ -342,7 +320,7 @@ The hyperparameters that performed best were:
 ```
 
 ```python
-    f1_final
+    F1 Score
     array([0.08695652, 0.22222222, 0.65811966, 0.37037037, 0.4375    ,
        0.71611253, 0.3255814 ])
 ```

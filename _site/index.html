@@ -22,7 +22,7 @@
 {"@context":"https://schema.org","@type":"WebSite","description":"A Data Analysis and ML HW for EECS 398 at U-M","headline":"Utilities Industry in the US: Risk Factors and Predictive Modeling","name":"power-outages","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=e49af13025ffb782a7d0b245e477a54c7a624424">
+    <link rel="stylesheet" href="/assets/css/style.css?v=6d75ba0ed1e13e053f5e40393068c58f229ddda1">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -283,9 +283,6 @@
 
 <p>Finally, on the topic of risks in the utilities space, we can group our data to see what regions are associated with the most severe power outages, and how that is changing over time.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">outages</span><span class="p">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">'YEAR'</span><span class="p">,</span> <span class="s">'POSTAL.CODE'</span><span class="p">])[</span><span class="s">'SEVERE'</span><span class="p">].</span><span class="nb">sum</span><span class="p">().</span><span class="n">reset_index</span><span class="p">()</span>
-</code></pre></div></div>
-
 <table>
   <thead>
     <tr>
@@ -400,14 +397,7 @@ These variables are static, and are therefore known at the time of the outage. W
 
 <p>I used the OneHotEncoder() from scikit-learn to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop=’first’ to avoid multicollinearity by removing the first category as a reference.”</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="n">simple_preprocessing</span> <span class="o">=</span> <span class="n">make_column_transformer</span><span class="p">((</span><span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="s">'first'</span><span class="p">,</span> <span class="n">handle_unknown</span><span class="o">=</span><span class="s">'ignore'</span><span class="p">),</span> <span class="p">[</span><span class="s">'POSTAL.CODE'</span><span class="p">,</span> <span class="s">'CLIMATE.REGION'</span><span class="p">]))</span>
-   <span class="n">simple_knn</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">simple_preprocessing</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">())</span>
-   <span class="n">simple_knn</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-   <span class="n">simple_y_pred</span> <span class="o">=</span> <span class="n">simple_knn</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-   <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">simple_y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="bp">None</span> <span class="p">)</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">f1_simple</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">F1</span> <span class="n">Score</span>
     <span class="n">array</span><span class="p">([</span><span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.44444444</span><span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span>
        <span class="mf">0.64692483</span><span class="p">,</span> <span class="mf">0.18181818</span><span class="p">])</span>
 </code></pre></div></div>
@@ -424,22 +414,13 @@ These variables are static, and are therefore known at the time of the outage. W
 
 <p>StandardScaler(): This method is effective when the underlying features are approximately normally distributed.</p>
 
-<p>QuantileTransformer(): This method is useful when the data distribution is highly skewed or not normal.</p>
-
-<p><br />
- The other critical part of improving this model was to tune relevant hyperparameters. I used GridSearchCV() to find the optimal value of k number of neighbors and the optimal distance algorithm for computating the nearest neighbors.</p>
+<p>QuantileTransformer(): This method is useful when the data distribution is highly skewed or not normal.
+<br />
+I looked at the distributions of each numerical variable and then applied the corresponding transformation.
+<br />
+The other critical part of improving this model was to tune relevant hyperparameters. I used GridSearchCV() to find the optimal value of k number of neighbors and the optimal distance algorithm for computating the nearest neighbors. The hyperparameters we will be tuning are<span style="color: #FFCCCC;"> k number of neighbors and weights (uniform or distance)</span>. With too few neighbors, the model will be prone to overfitting, but with to many, it may over-generalize. Thus, we need to find the k performs best, which is interpreted as the k that maximizes F1-Score.</p>
 
 <h3 id="performance-improvements">Performance Improvements</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pipe</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">adv_preprocessing</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">())</span>
-<span class="n">searcher</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
-        <span class="n">pipe</span><span class="p">,</span>
-        <span class="n">param_grid</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
-        <span class="n">scoring</span><span class="o">=</span><span class="s">'f1_weighted'</span>
-    <span class="p">)</span>
-
-<span class="n">searcher</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-</code></pre></div></div>
 
 <p>The hyperparameters that performed best were:</p>
 
@@ -447,7 +428,7 @@ These variables are static, and are therefore known at the time of the outage. W
  <span class="s">'kneighborsclassifier__weights'</span><span class="p">:</span> <span class="s">'distance'</span><span class="p">}</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">f1_final</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">F1</span> <span class="n">Score</span>
     <span class="n">array</span><span class="p">([</span><span class="mf">0.08695652</span><span class="p">,</span> <span class="mf">0.22222222</span><span class="p">,</span> <span class="mf">0.65811966</span><span class="p">,</span> <span class="mf">0.37037037</span><span class="p">,</span> <span class="mf">0.4375</span>    <span class="p">,</span>
        <span class="mf">0.71611253</span><span class="p">,</span> <span class="mf">0.3255814</span> <span class="p">])</span>
 </code></pre></div></div>
