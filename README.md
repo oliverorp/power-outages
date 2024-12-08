@@ -347,7 +347,7 @@ From the confusion matrix, it appears that our model is sufficient at predicting
 <br>
 <br>
 ## <span style="color:#FF9999;"> Conclusion<span>
-I broadly examined risk factors in the utilities industry. I then proposed a general model to classify the cause of a power outage before improving upon it sustantially through enhancing my feature space.
+I broadly examined risk factors in the utilities industry. I then proposed a general model using scikit learn to classify the cause of a power outage before improving upon it by enhancing my feature space.
 
 <!-- <iframe
   src="assets/choropleth.html"
