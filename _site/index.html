@@ -22,7 +22,7 @@
 {"@context":"https://schema.org","@type":"WebSite","description":"A Data Analysis and ML HW for EECS 398 at U-M","headline":"Utilities Industry in the US: Risk Factors and Predictive Modeling","name":"power-outages","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=939149290454a572988d259db5696ab99a03fc12">
+    <link rel="stylesheet" href="/assets/css/style.css?v=6b8c0322174204aca0fb67edcfa786cee2fdbb83">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -257,7 +257,7 @@
 
 <h3 id="univariate-analysis">Univariate Analysis</h3>
 
-<p>A simple bar chart displays the number of power outages associated with each cause category for the time period 2000 - 2016. It appears that severe weather, intentional attack, and system operability disruption are among the most frequent causes of power outages. This chart appeals to those interested in risk factors associated with the utilities industry and what remains to be the most significant hurdles in that space.</p>
+<p>A simple bar chart displays the number of power outages associated with each cause category for the time period 2000 - 2016. It appears that severe weather, intentional attack, and system operability disruption are among the most frequent causes of power outages. This chart appeals to those interested in risk factors associated with the utilities industry and what remains to be the most significant hurdles in that space. Specifically, this chart helps to address the question of what factors investors should be aware of when looking into the energy sector.</p>
 
 <iframe src="assets/univariate_1.html" width="600" height="400" frameborder="0"></iframe>
 
@@ -277,7 +277,7 @@
 
 <p>The time series data suggests a negative correlation between customers affected and time. Perhaps utilities companies are adapting to their challenges and becoming more efficient with outage mitigation.</p>
 
-<p>The second bivariate display shows that severe weather, fuel supply emergency, and public appeal have the largest median response times. Markets especially prone to these risk factors may be of interest to someone seeking a better understanding of the risks associated with the utility space.</p>
+<p>The second bivariate display shows that severe weather, fuel supply emergency, and public appeal have the largest median response times. Markets especially prone to these risk factors may be of interest to someone seeking a better understanding of the risks associated with the utility space. Thus, we have answered our question about what challenges the utilities indusstry is facing.</p>
 
 <h2 id="interesting-aggregates">Interesting Aggregates</h2>
 
@@ -395,7 +395,8 @@ These variables are static, and are therefore known at the time of the outage. W
   </tbody>
 </table>
 
-<p>I used the OneHotEncoder() from scikit-learn to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop=’first’ to avoid multicollinearity by removing the first category as a reference.”</p>
+<p>My model uses the KNeighborsClassifier() from scikit-learn.
+I used the OneHotEncoder() to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop=’first’ to avoid multicollinearity by removing the first category as a reference.”</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">F1</span> <span class="n">Score</span>
     <span class="n">array</span><span class="p">([</span><span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.44444444</span><span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span>

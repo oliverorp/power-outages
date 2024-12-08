@@ -174,7 +174,7 @@ The distribution of OUTAGE.DURATION accumulated more mass around its center poin
 
 ### Univariate Analysis
 
-A simple bar chart displays the number of power outages associated with each cause category for the time period 2000 - 2016. It appears that severe weather, intentional attack, and system operability disruption are among the most frequent causes of power outages. This chart appeals to those interested in risk factors associated with the utilities industry and what remains to be the most significant hurdles in that space.
+A simple bar chart displays the number of power outages associated with each cause category for the time period 2000 - 2016. It appears that severe weather, intentional attack, and system operability disruption are among the most frequent causes of power outages. This chart appeals to those interested in risk factors associated with the utilities industry and what remains to be the most significant hurdles in that space. Specifically, this chart helps to address the question of what factors investors should be aware of when looking into the energy sector.
 
 <iframe
   src="assets/univariate_1.html"
@@ -209,7 +209,7 @@ Specifically, let's explore the following
 
 The time series data suggests a negative correlation between customers affected and time. Perhaps utilities companies are adapting to their challenges and becoming more efficient with outage mitigation.
 
-The second bivariate display shows that severe weather, fuel supply emergency, and public appeal have the largest median response times. Markets especially prone to these risk factors may be of interest to someone seeking a better understanding of the risks associated with the utility space.
+The second bivariate display shows that severe weather, fuel supply emergency, and public appeal have the largest median response times. Markets especially prone to these risk factors may be of interest to someone seeking a better understanding of the risks associated with the utility space. Thus, we have answered our question about what challenges the utilities indusstry is facing.
 
 ## Interesting Aggregates
 
@@ -279,7 +279,8 @@ The feature space can be denoted as follows:
 | **POPPCT_URBAN**    | Quantitative |
 | **PCT_WATER_TOT**   | Quantitative |
 
-I used the OneHotEncoder() from scikit-learn to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop='first' to avoid multicollinearity by removing the first category as a reference."
+My model uses the KNeighborsClassifier() from scikit-learn.
+I used the OneHotEncoder() to encode categorical variables, such as POSTAL.CODE and CLIMATE.REGION. This transformation converted these nominal variables into binary columns, allowing the model to process them effectively. I used the parameter drop='first' to avoid multicollinearity by removing the first category as a reference."
 
 ```python
     F1 Score
